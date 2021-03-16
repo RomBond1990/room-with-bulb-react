@@ -41,7 +41,6 @@ class CreateRoomComponent extends Component {
     saveOrUpdateRoom = (event) => {
         event.preventDefault();
         let room = {name: this.state.name, country: this.state.country};
-        console.log('room => ' + JSON.stringify(room));
 
         if (this.state.id === '_add') {
             RoomService.createRoom(room).then(res => {

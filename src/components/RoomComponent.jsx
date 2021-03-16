@@ -10,7 +10,8 @@ class RoomComponent extends Component {
             id: this.props.match.params.id,
             name: '',
             bulb: '',
-            country: ''
+            country: '',
+            message: ''
         }
         this.lightUp = this.lightUp.bind(this);
         this.turnOff = this.turnOff.bind(this);
@@ -26,14 +27,13 @@ class RoomComponent extends Component {
 
     turnOff = (event) => {
         event.preventDefault();
-        let roomBulb = false;
-        this.setState({bulb: roomBulb}, () => {
+        this.setState({bulb: false}, () => {
             let room = {name: this.state.name, bulb: this.state.bulb, country: this.state.country};
             RoomService.updateRoom(room, this.state.id);
         });
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.getData()
     }
 
@@ -43,7 +43,8 @@ class RoomComponent extends Component {
             this.setState({
                 name: room.name,
                 bulb: room.bulb,
-                country: room.country
+                country: room.country,
+                message: room.message
             });
         });
     }
@@ -57,14 +58,23 @@ class RoomComponent extends Component {
 
     }
 
+    enterRoom() {
+        if (this.state.message == undefined) {
+            return (<div>
+                {this.bulbLight()}
+                <button className="btn btn-success" onClick={this.lightUp}>On</button>
+                <button className="btn btn-danger" onClick={this.turnOff}>Off</button>
+            </div>)
+        }
+        if (typeof this.state.message != undefined) {
+            return <h3>{this.state.message}</h3>
+        }
+    }
+
     render() {
         return (
             <div className="container">
-                <div>
-                    {this.bulbLight()}
-                    <button className="btn btn-success" onClick={this.lightUp}>On</button>
-                    <button className="btn btn-danger" onClick={this.turnOff}>Off</button>
-                </div>
+                {this.enterRoom()}
             </div>
         );
     }
